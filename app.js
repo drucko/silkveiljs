@@ -18,14 +18,12 @@ var mappings = {
 
 var actions = {
   'download': function (res, mapping) {
-    var contentDisposition = mapping.forceDownload ? 'attachment' : 'inline';
-
-    res.writeHead(200, {
-      'Content-Type': mapping.contentType,
-      'Content-Disposition': contentDisposition + '; filename=' + mapping.fileName + ';'      
-    });
-
     http.get(url.parse(mapping.url), function (data) {
+      var contentDisposition = mapping.forceDownload ? 'attachment' : 'inline';
+      res.writeHead(data.statusCode, {
+        'Content-Type': mapping.contentType,
+        'Content-Disposition': contentDisposition + '; filename=' + mapping.fileName + ';'      
+      });
       data.pipe(res);
     });
   },
