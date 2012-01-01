@@ -1,46 +1,7 @@
 var http = require('http');
-var url = require('url');
 
-var mappings = {
-  'goloroden': {
-    action: 'redirect',
-    url: 'http://www.goloroden.de/',
-    type: 'permanent'
-  },
-  'polarbear': {
-    action: 'download',
-    url: 'http://www.goloroden.de/images/Logo.png',
-    fileName: 'PolarBear.png',
-    contentType: 'image/png',
-    forceDownload: false
-  }
-};
-
-var actions = {
-  'download': function (res, mapping) {
-    http.get(url.parse(mapping.url), function (data) {
-      var contentDisposition = mapping.forceDownload ? 'attachment' : 'inline';
-      res.writeHead(data.statusCode, {
-        'Content-Type': mapping.contentType,
-        'Content-Disposition': contentDisposition + '; filename=' + mapping.fileName + ';'      
-      });
-      data.pipe(res);
-    });
-  },
-  'error': function (res, mapping) {
-    res.writeHead(mapping.statusCode, {
-      'Content-Type': 'text/html'
-    });
-    res.end(mapping.statusCode + ' ' + mapping.data);
-  },
-  'redirect': function (res, mapping) {
-    var statusCode = mapping.type === 'permanent' ? 301 : 307;
-    res.writeHead(statusCode, {
-      'Location': mapping.url
-    });
-    res.end();
-  }
-};
+var mappings = require('./mappings');
+var actions = require('./actions');
 
 http.createServer(function (req, res) {
   var alias = req.url.substring(1);
