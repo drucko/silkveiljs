@@ -1,9 +1,13 @@
 var http = require('http');
 
-var mappings = require('./mappings');
-var actions = require('./actions');
+var redirect = require('redirect')('silkveiljs.com');
+
+var mappings = require('./mappings.js');
+var actions = require('./actions.js');
 
 http.createServer(function (req, res) {
+  redirect(req, res);
+
   var alias = req.url.substring(1);
   var mapping = mappings[alias] || {
     action: 'error',
