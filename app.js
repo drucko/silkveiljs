@@ -3,6 +3,7 @@ var http = require('http');
 var redirect = require('redirect')('silkveiljs.com');
 
 var mappings = require('./mappings.js');
+var constraints = require('./constraints.js');
 var actions = require('./actions.js');
 
 http.createServer(function (req, res) {
@@ -13,6 +14,12 @@ http.createServer(function (req, res) {
     action: 'error',
     statusCode: 404,
     data: 'File not found'
+  };
+
+  mapping = constraints.verify(mapping) || {
+    action: 'error',
+    statusCode: 409,
+    data: 'Conflict'
   };
 
   actions[mapping.action](res, mapping);
