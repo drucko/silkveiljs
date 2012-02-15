@@ -23,4 +23,4 @@ http.createServer(function (req, res) {
   };
 
   actions[mapping.action](res, mapping);
-}).listen(3000);
+}).listen(process.env.PORT || 3000);
