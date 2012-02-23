@@ -6,6 +6,11 @@ var mappings = {
     url: 'http://www.goloroden.de/',
     type: 'permanent'
   },
+  'google': {
+    action: 'redirect',
+    url: 'http://www.google.de/',
+    type: 'permanent'
+  },
   'polarbear': {
     action: 'download',
     url: 'http://www.goloroden.de/images/Logo.png',
