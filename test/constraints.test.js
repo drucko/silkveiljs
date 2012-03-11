@@ -29,23 +29,18 @@ suite('When verify is called with a mapping', function () {
       assert.that(actual, is.equalTo(expected));
     });
 
-    test('and the given datetime is in the past undefined is returned.', function () {
-    });
+    test('and the given datetime is in the past undefined is returned.');
   });
 
   suite('with a validFrom constraint', function () {
-    test('and the given datetime is in the future undefined is returned.', function () {
-    });
+    test('and the given datetime is in the future undefined is returned.');
 
-    test('and the given datetime is in the past the mapping is returned.', function () {
-    });
+    test('and the given datetime is in the past the mapping is returned.');
   });
 
   suite('with more than one constraint', function () {
-    test('and all constraints are valid the mapping is returned.', function () {
-    });
+    test('and all constraints are valid the mapping is returned.');
 
-    test('and at least one constraint is not valid undefined is returned.', function () {
-    });
+    test('and at least one constraint is not valid undefined is returned.');
   });
 });
