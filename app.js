@@ -1,5 +1,5 @@
 var http = require('http'),
-    connect = require('connect');
+    express = require('express');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -7,11 +7,14 @@ var mappings = require('./mappings.js');
 var constraints = require('./constraints.js');
 var actions = require('./actions.js');
 
-var app = connect();
-app.use(redirect);
-app.use(function (req, res) {
-  var alias = req.url.substring(1);
-  var mapping = mappings[alias] || {
+var app = express();
+
+app.configure(function () {
+  app.use(redirect);
+});
+
+app.get('/:alias', function (req, res) {
+  var mapping = mappings[req.params.alias] || {
     action: 'error',
     statusCode: 404,
     data: 'File not found'

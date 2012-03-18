@@ -28,17 +28,10 @@ var actions = {
     }
   },
   'error': function (res, mapping) {
-    res.writeHead(mapping.statusCode, {
-      'Content-Type': 'text/html'
-    });
-    res.end(mapping.statusCode + ' ' + mapping.data);
+    res.send(mapping.statusCode, mapping.statusCode + ' ' + mapping.data);
   },
   'redirect': function (res, mapping) {
-    var statusCode = mapping.type === 'permanent' ? 301 : 307;
-    res.writeHead(statusCode, {
-      'Location': mapping.url
-    });
-    res.end();
+    res.redirect(mapping.type === 'permanent' ? 301 : 307, mapping.url);
   }
 };
 
