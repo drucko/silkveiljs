@@ -1,0 +1,60 @@
+$blue = #05c
+$gray = #445
+$lightgray = #ccd
+
+body
+  color $gray
+  font-family Sans-Serif
+  font-size small
+  padding 7px
+
+a
+  color $blue
+  font-weight bold
+  text-decoration none
+
+  &:focus
+  &:hover
+    text-decoration underline
+
+#header
+  h1
+    font-size 250%
+    font-weight bold
+    margin 21px 0 0 0
+  h2
+    font-size 125%
+    font-weight bold
+    margin 0 0 35px 0
+    text-transform lowercase
+
+#content
+  .mapping
+    background-color $lightgray
+    border solid 1px $gray
+    border-radius 7px
+    box-sizing border-box
+    height 235px
+    margin 0 7px 7px 0
+    padding 7px
+
+    h3
+      font-size 150%
+      font-weight bold
+      margin 0 0 7px 0
+
+    h4
+      font-size 110%
+      cont-style italic
+      font-weight bold
+      margin 14px 0 7px 0
+
+    .key
+      font-style italic
+
+    div
+      margin 0
+      overflow hidden
+      padding 0
+      text-overflow ellipsis
+      white-space nowrap

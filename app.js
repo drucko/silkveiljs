@@ -10,7 +10,22 @@ var actions = require('./actions.js');
 var app = express();
 
 app.configure(function () {
+  app.set('view engine', 'jade');
+  app.set('views', __dirname + '/views');
+
   app.use(redirect);
+  app.use(express.static(__dirname + '/public'));
+  app.use(require('stylus').middleware({
+    src: __dirname + '/public',
+    force: true,
+    compress: true
+  }));
+});
+
+app.get('/', function (req, res) {
+  res.render('index', {
+    mappings: mappings
+  });
 });
 
 app.get('/:alias', function (req, res) {
