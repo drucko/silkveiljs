@@ -3,30 +3,30 @@ extends layout
 block content
   each mapping, alias in mappings
     .mapping.grid_4
-      .grid_4
+      .grid_4.alpha.omega
         h3= alias
-      .key.grid_1 URL:
-      .grid_3: a(href='#{alias}')= mapping.url
-      .key.grid_1 Action:
-      .grid_3= mapping.action
+      .key.grid_1.alpha URL:
+      .grid_3.omega: a(href='#{alias}')= mapping.url
+      .key.grid_1.alpha Action:
+      .grid_3.omega= mapping.action
       if mapping.action === 'redirect'
-        .key.grid_1 Type:
-        .grid_3= mapping.type
+        .key.grid_1.alpha Type:
+        .grid_3.omega= mapping.type
       else if mapping.action === 'download'
-        .key.grid_1 File name:
-        .grid_3= mapping.fileName
-        .key.grid_1 Content type:
-        .grid_3= mapping.contentType
-        .key.grid_1 Force download:
-        .grid_3= mapping.forceDownload
-      .grid_4
+        .key.grid_1.alpha File name:
+        .grid_3.omega= mapping.fileName
+        .key.grid_1.alpha Content type:
+        .grid_3.omega= mapping.contentType
+        .key.grid_1.alpha Force download:
+        .grid_3.omega= mapping.forceDownload
+      .grid_4.alpha.omega
         h4 Constraints
       if mapping.constraints
         if mapping.constraints.validFrom
-          .key.grid_1 Valid from:
-          .grid_3= mapping.constraints.validFrom
+          .key.grid_1.alpha Valid from:
+          .grid_3.omega= mapping.constraints.validFrom
         if mapping.constraints.validBefore
-          .key.grid_1 Valid before:
-          .grid_3= mapping.constraints.validBefore
+          .key.grid_1.alpha Valid before:
+          .grid_3.omega= mapping.constraints.validBefore
       else
-        .grid_4 n/a
+        .grid_4.alpha.omega n/a
