@@ -24,13 +24,11 @@ app.configure(function () {
 });
 
 app.get('/', function (req, res) {
-  res.render('index', {
-    mappings: mappings
-  });
+  res.render('index');
 });
 
 app.get('/:alias', function (req, res) {
-  var mapping = mappings[req.params.alias] || {
+  var mapping = mappings.findOne(req.params.alias) || {
     action: 'error',
     statusCode: 404,
     data: 'File not found'
@@ -49,8 +47,5 @@ var server = http.createServer(app).listen(process.env.PORT || 3000);
 var everyone = nowjs.initialize(server);
 
 nowjs.on('connect', function () {
-  for(var alias in mappings) {
-    mappings[alias].alias = alias;
-    this.now.createMapping(mappings[alias]);
-  }
+  this.now.initialize(mappings.find());
 });

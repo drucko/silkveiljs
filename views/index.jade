@@ -34,6 +34,8 @@ block content
   script(type='text/javascript').
     var template = jade.compile($('#mappingTemplate').text());
 
-    now.createMapping = function (mapping) {
-      $('#content').append(template(mapping));
+    now.initialize = function (mappings) {
+      for(var i = 0, len = mappings.length; i < len; i++) {
+        $('#content').append(template(mappings[i]));
+      }
     };
