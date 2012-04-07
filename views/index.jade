@@ -2,9 +2,11 @@ extends layout
 
 block content
   script(type='text/jade')#mappingTemplate.
-    .mapping.grid_4
+    .mapping.grid_4(id='mapping_\#{alias}')
       .grid_4.alpha.omega
-        h3= alias
+        h3
+          | \#{alias}
+          a(href="javascript:void now.deleteMapping('\#{alias}');") X
       .key.grid_1.alpha URL:
       .grid_3.omega: a(href='\#{alias}')= url
       .key.grid_1.alpha Action:
@@ -35,7 +37,12 @@ block content
     var template = jade.compile($('#mappingTemplate').text());
 
     now.initialize = function (mappings) {
+      $('#content .mapping').remove();
       for(var i = 0, len = mappings.length; i < len; i++) {
         $('#content').append(template(mappings[i]));
       }
+    };
+
+    now.mappingDeleted = function (alias) {
+      $('#mapping_' + alias).remove();
     };

@@ -44,6 +44,15 @@ var store = {
       }
     }
     return undefined;
+  },
+
+  delete: function (alias) {
+    for(var i = 0, len = mappings.length; i < len; i++) {
+      if(mappings[i].alias === alias) {
+        mappings.splice(i, 1);
+        return;
+      }
+    }
   }
 };
 

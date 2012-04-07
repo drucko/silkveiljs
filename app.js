@@ -49,3 +49,8 @@ var everyone = nowjs.initialize(server);
 nowjs.on('connect', function () {
   this.now.initialize(mappings.find());
 });
+
+everyone.now.deleteMapping = function (alias) {
+  mappings.delete(alias);
+  everyone.now.mappingDeleted(alias);
+};
