@@ -1,4 +1,5 @@
 var http = require('http'),
+    nowjs = require('now'),
     express = require('express');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
@@ -43,4 +44,13 @@ app.get('/:alias', function (req, res) {
 
   actions[mapping.action](res, mapping);
 });
-http.createServer(app).listen(process.env.PORT || 3000);
+
+var server = http.createServer(app).listen(process.env.PORT || 3000);
+var everyone = nowjs.initialize(server);
+
+nowjs.on('connect', function () {
+  for(var alias in mappings) {
+    mappings[alias].alias = alias;
+    this.now.createMapping(mappings[alias]);
+  }
+});

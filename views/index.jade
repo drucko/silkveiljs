@@ -1,32 +1,39 @@
 extends layout
 
 block content
-  each mapping, alias in mappings
+  script(type='text/jade')#mappingTemplate.
     .mapping.grid_4
       .grid_4.alpha.omega
         h3= alias
       .key.grid_1.alpha URL:
-      .grid_3.omega: a(href='#{alias}')= mapping.url
+      .grid_3.omega: a(href='\#{alias}')= url
       .key.grid_1.alpha Action:
-      .grid_3.omega= mapping.action
-      if mapping.action === 'redirect'
+      .grid_3.omega= action
+      if action === 'redirect'
         .key.grid_1.alpha Type:
-        .grid_3.omega= mapping.type
-      else if mapping.action === 'download'
+        .grid_3.omega= type
+      else if action === 'download'
         .key.grid_1.alpha File name:
-        .grid_3.omega= mapping.fileName
+        .grid_3.omega= fileName
         .key.grid_1.alpha Content type:
-        .grid_3.omega= mapping.contentType
+        .grid_3.omega= contentType
         .key.grid_1.alpha Force download:
-        .grid_3.omega= mapping.forceDownload
+        .grid_3.omega= forceDownload
       .grid_4.alpha.omega
         h4 Constraints
-      if mapping.constraints
-        if mapping.constraints.validFrom
+      if typeof constraints !== 'undefined'
+        if typeof constraints.validFrom !== 'undefined'
           .key.grid_1.alpha Valid from:
-          .grid_3.omega= mapping.constraints.validFrom
-        if mapping.constraints.validBefore
+          .grid_3.omega= constraints.validFrom
+        if typeof constraints.validBefore !== 'undefined'
           .key.grid_1.alpha Valid before:
-          .grid_3.omega= mapping.constraints.validBefore
+          .grid_3.omega= constraints.validBefore
       else
         .grid_4.alpha.omega n/a
+
+  script(type='text/javascript').
+    var template = jade.compile($('#mappingTemplate').text());
+
+    now.createMapping = function (mapping) {
+      $('#content').append(template(mapping));
+    };
