@@ -1,6 +1,7 @@
 var http = require('http'),
     nowjs = require('now'),
-    express = require('express');
+    express = require('express'),
+    moment = require('moment');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -49,6 +50,19 @@ var everyone = nowjs.initialize(server);
 nowjs.on('connect', function () {
   this.now.initialize(mappings.find());
 });
+
+everyone.now.createMapping = function(mapping) {
+  if(mapping.constraints) {
+    mapping.constraints.validFrom && (mapping.constraints.validFrom = [
+      moment.utc(mapping.constraints.validFrom).toDate()
+    ]);
+    mapping.constraints.validBefore && (mapping.constraints.validBefore = [
+      moment.utc(mapping.constraints.validBefore).toDate()
+    ]);
+  }
+  mappings.create(mapping);
+  everyone.now.mappingCreated(mapping);
+};
 
 everyone.now.deleteMapping = function (alias) {
   mappings.delete(alias);

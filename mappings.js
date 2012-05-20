@@ -46,6 +46,10 @@ var store = {
     return undefined;
   },
 
+  create: function (mapping) {
+    mappings.push(mapping);
+  },
+
   delete: function (alias) {
     for(var i = 0, len = mappings.length; i < len; i++) {
       if(mappings[i].alias === alias) {

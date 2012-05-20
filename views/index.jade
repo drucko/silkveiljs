@@ -1,6 +1,54 @@
 extends layout
 
 block content
+  .newMapping.grid_4
+    .grid_4.alpha.omega
+      h3
+        | New 
+        a(href='#', id='createMapping') +
+    .key.grid_1.alpha.omega
+      label(for='alias') Alias:
+    .grid_3.alpha.omega
+      input(type='text', id='alias')
+    .key.grid_1.alpha.omega
+      label(for='url') URL:
+    .grid_3.alpha.omega
+      input(type='text', id='url')
+    .key.grid_1.alpha.omega
+      label(for='action') Action:
+    .grid_3.alpha.omega
+      select(id='action')
+        option(value='download') download
+        option(value='redirect') redirect
+    .key.grid_1.alpha.omega.redirectOption
+      label(for='type') Type:
+    .grid_3.alpha.omega.redirectOption
+      select(id='type')
+        option(value='permanent') permanent
+        option(value='temporary') temporary
+    .key.grid_1.alpha.omega.downloadOption
+      label(for='fileName') File name:
+    .grid_3.alpha.omega.downloadOption
+      input(type='text', id='fileName')
+    .key.grid_1.alpha.omega.downloadOption
+      label(for='contentType') Content type:
+    .grid_3.alpha.omega.downloadOption
+      input(type='text', id='contentType')
+    .key.grid_1.alpha.omega.downloadOption
+      label(for='forceDownload') Force download:
+    .grid_3.alpha.omega.downloadOption
+      select(id='forceDownload')
+        option(value='false') false
+        option(value='true') true
+    .key.grid_1.alpha.omega
+      label(for='validFrom') Valid from:
+    .grid_3.alpha.omega
+      input(type='datetime', id='validFrom')
+    .key.grid_1.alpha.omega
+      label(for='validBefore') Valid before:
+    .grid_3.alpha.omega
+      input(type='datetime', id='validBefore')
+
   script(type='text/jade')#mappingTemplate.
     .mapping.grid_4(id='mapping_\#{alias}')
       .grid_4.alpha.omega
@@ -34,15 +82,72 @@ block content
         .grid_4.alpha.omega n/a
 
   script(type='text/javascript').
-    var template = jade.compile($('#mappingTemplate').text());
+    $(function () {
+      var template = jade.compile($('#mappingTemplate').text());
 
-    now.initialize = function (mappings) {
-      $('#content .mapping').remove();
-      for(var i = 0, len = mappings.length; i < len; i++) {
-        $('#content').append(template(mappings[i]));
+      function toggleOptions() {
+        if($('#action').val() === 'redirect') {
+          $('.downloadOption').hide();
+          $('.redirectOption').show();
+        } else {
+          $('.downloadOption').show();
+          $('.redirectOption').hide();
+        }
       }
-    };
 
-    now.mappingDeleted = function (alias) {
-      $('#mapping_' + alias).remove();
-    };
+      $('#action').change(toggleOptions);
+
+      $('#createMapping').click(function () {
+        var mapping = {
+          alias: $('#alias').val(),
+          url: $('#url').val(),
+          action: $('#action').val()
+        };
+
+        if(mapping.action === 'redirect') {
+          $.extend(mapping, {
+            type: $('#type').val()
+          });
+        } else {
+          $.extend(mapping, {
+            fileName: $('#fileName').val(),
+            contentType: $('#contentType').val(),
+            forceDownload: $('#forceDownload').val()
+          });
+        }
+
+        $.each(['validFrom', 'validBefore'], function (index, id) {
+          var value = $('#' + id).val();
+          if(value) {
+            !mapping.constraints && (mapping.constraints = {});
+            mapping.constraints[id] = value;
+          }
+        });
+
+        now.createMapping(mapping);
+
+        $.each(
+          ['alias', 'url', 'type', 'fileName', 'contentType', 'validFrom', 'validBefore'],
+          function(index, id) {
+            $('#' + id).val('')
+          }
+        );
+      });
+
+      now.initialize = function (mappings) {
+        $('#content .mapping').remove();
+        for(var i = 0, len = mappings.length; i < len; i++) {
+          $('#content').append(template(mappings[i]));
+        }
+      };
+
+      now.mappingCreated = function (mapping) {
+        $('#content').append(template(mapping));
+      };
+
+      now.mappingDeleted = function (alias) {
+        $('#mapping_' + alias).remove();
+      };
+
+      toggleOptions();
+    });
