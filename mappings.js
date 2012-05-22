@@ -1,5 +1,4 @@
-var moment = require('moment'),
-    mongo = require('mongoskin'),
+var mongo = require('mongoskin'),
     db = mongo.db('mongo://localhost/silkveiljs?auto_reconnect=true');
 
 db.bind('mappings');
