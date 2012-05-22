@@ -1,62 +1,25 @@
-var moment = require('moment');
+var moment = require('moment'),
+    mongo = require('mongoskin'),
+    db = mongo.db('mongo://localhost/silkveiljs?auto_reconnect=true');
 
-var mappings = [
-  {
-    alias: 'goloroden',
-    action: 'redirect',
-    url: 'http://www.goloroden.de/',
-    type: 'permanent'
-  }, {
-    alias: 'google',
-    action: 'redirect',
-    url: 'http://www.google.de/',
-    type: 'permanent'
-  }, {
-    alias: 'polarbear',
-    action: 'download',
-    url: 'http://www.goloroden.de/images/Logo.png',
-    fileName: 'PolarBear.png',
-    contentType: 'image/png',
-    forceDownload: false,
-    constraints: {
-      validFrom: [ moment.utc([2012, 0, 1]).toDate() ],
-      validBefore: [ moment.utc([2012, 11, 31, 23, 59, 59]).toDate() ]
-    }
-  }, {
-    alias: 'portrait',
-    action: 'download',
-    url: 'file://./Golo-Roden.jpg',
-    fileName: 'Portrait.jpg',
-    contentType: 'image/jpeg',
-    forceDownload: false
-  }
-];
+db.bind('mappings');
+db.mappings.ensureIndex({ alias: 1 });
 
 var store = {
-  find: function () {
-    return mappings;
+  find: function (callback) {
+    db.mappings.findItems(callback);
   },
 
-  findOne: function (alias) {
-    for(var i = 0, len = mappings.length; i < len; i++) {
-      if(mappings[i].alias === alias) {
-        return mappings[i];
-      }
-    }
-    return undefined;
+  findOne: function (alias, callback) {
+    db.mappings.findOne({ alias: alias }, callback)
   },
 
   create: function (mapping) {
-    mappings.push(mapping);
+    db.mappings.save(mapping);
   },
 
   delete: function (alias) {
-    for(var i = 0, len = mappings.length; i < len; i++) {
-      if(mappings[i].alias === alias) {
-        mappings.splice(i, 1);
-        return;
-      }
-    }
+    db.mappings.remove({ alias: alias });
   }
 };
 

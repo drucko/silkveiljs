@@ -29,26 +29,31 @@ app.get('/', function (req, res) {
 });
 
 app.get('/:alias', function (req, res) {
-  var mapping = mappings.findOne(req.params.alias) || {
-    action: 'error',
-    statusCode: 404,
-    data: 'File not found'
-  };
+  mappings.findOne(req.params.alias, function (err, result) {
+    var mapping = result || {
+      action: 'error',
+      statusCode: 404,
+      data: 'File not found'
+    };
 
-  mapping = constraints.verify(mapping) || {
-    action: 'error',
-    statusCode: 409,
-    data: 'Conflict'
-  };
+    mapping = constraints.verify(mapping) || {
+      action: 'error',
+      statusCode: 409,
+      data: 'Conflict'
+    };
 
-  actions[mapping.action](res, mapping);
+    actions[mapping.action](res, mapping);
+  });
 });
 
 var server = http.createServer(app).listen(process.env.PORT || 3000);
 var everyone = nowjs.initialize(server);
 
 nowjs.on('connect', function () {
-  this.now.initialize(mappings.find());
+  var that = this;
+  mappings.find(function (err, result) {
+    that.now.initialize(result);
+  });
 });
 
 everyone.now.createMapping = function(mapping) {
