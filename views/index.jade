@@ -154,7 +154,7 @@ block content
       };
 
       now.snapshotCreated = function (alias) {
-        $('#mapping_' + alias + ' .snapshot').attr('src', '/snapshots/' + alias + '.png');
+        $('#mapping_' + alias + ' .snapshot').attr('src', '/snapshots/' + alias + '.png?timestamp=' + $.now());
       };
 
       toggleOptions();

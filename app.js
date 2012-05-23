@@ -3,9 +3,7 @@ var http = require('http'),
     express = require('express'),
     moment = require('moment'),
     kue = require('kue'),
-    jobs = kue.createQueue(),
-    fs = require('fs'),
-    util = require('util');
+    jobs = kue.createQueue();
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -21,12 +19,22 @@ app.configure(function () {
 
   app.use(redirect);
   app.use(express.static(__dirname + '/public'));
+  app.use(deliverDefaultImage());
   app.use(require('stylus').middleware({
     src: __dirname + '/public',
     force: true,
     compress: true
   }));
 });
+
+function deliverDefaultImage() {
+  return function (req, res, next) {
+    if(req.url.indexOf('/snapshots/') !== 0) {
+      return next();
+    }
+    res.sendfile('empty.png');
+  }  
+}
 
 app.get('/', function (req, res) {
   res.render('index');
@@ -77,17 +85,13 @@ everyone.now.createMapping = function(mapping) {
   mappings.create(mapping);
 
   if(mapping.action === 'redirect') {
-    is = fs.createReadStream('empty.png');
-    os = fs.createWriteStream('public/snapshots/' + mapping.alias + '.png');
-    util.pump(is, os, function () {
-      jobs.create('createSnapshot', {
-        title: mapping.url,
-        url: mapping.url,
-        width: 1366,
-        height: 768,
-        fileName: mapping.alias
-      }).save();
-    });
+    jobs.create('createSnapshot', {
+      title: mapping.url,
+      url: mapping.url,
+      width: 1366,
+      height: 768,
+      fileName: mapping.alias
+    }).save();
   }
 
   everyone.now.mappingCreated(mapping);
