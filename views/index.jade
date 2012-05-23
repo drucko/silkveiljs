@@ -54,7 +54,7 @@ block content
       .grid_4.alpha.omega
         h3
           if action === 'redirect'
-            img.thumbnail(src='/snapshots/\#{alias}.png', width='53', height='30')
+            img.snapshot(src='/snapshots/\#{alias}.png', width='53', height='30')
             |  \#{alias}
           else
             | \#{alias}
@@ -154,7 +154,7 @@ block content
       };
 
       now.snapshotCreated = function (alias) {
-        $('#mapping_' + alias + ' .thumbnail').attr('src', '/snapshots/' + alias + '.png');
+        $('#mapping_' + alias + ' .snapshot').attr('src', '/snapshots/' + alias + '.png');
       };
 
       toggleOptions();
