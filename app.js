@@ -1,7 +1,11 @@
 var http = require('http'),
     nowjs = require('now'),
     express = require('express'),
-    moment = require('moment');
+    moment = require('moment'),
+    kue = require('kue'),
+    jobs = kue.createQueue(),
+    fs = require('fs'),
+    util = require('util');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -49,6 +53,11 @@ app.get('/:alias', function (req, res) {
 var server = http.createServer(app).listen(process.env.PORT || 3000);
 var everyone = nowjs.initialize(server);
 
+jobs.process('snapshotCreated', function (job, done) {
+  everyone.now.snapshotCreated(job.data.fileName);
+  done();
+});
+
 nowjs.on('connect', function () {
   var that = this;
   mappings.find(function (err, result) {
@@ -66,6 +75,21 @@ everyone.now.createMapping = function(mapping) {
     ]);
   }
   mappings.create(mapping);
+
+  if(mapping.action === 'redirect') {
+    is = fs.createReadStream('empty.png');
+    os = fs.createWriteStream('public/snapshots/' + mapping.alias + '.png');
+    util.pump(is, os, function () {
+      jobs.create('createSnapshot', {
+        title: mapping.url,
+        url: mapping.url,
+        width: 1366,
+        height: 768,
+        fileName: mapping.alias
+      }).save();
+    });
+  }
+
   everyone.now.mappingCreated(mapping);
 };
 

@@ -53,7 +53,11 @@ block content
     .mapping.grid_4(id='mapping_\#{alias}')
       .grid_4.alpha.omega
         h3
-          | \#{alias}
+          if action === 'redirect'
+            img.thumbnail(src='/snapshots/\#{alias}.png', width='53', height='30')
+            |  \#{alias}
+          else
+            | \#{alias}
           a(href="javascript:void now.deleteMapping('\#{alias}');") X
       .key.grid_1.alpha URL:
       .grid_3.omega: a(href='\#{alias}')= url
@@ -147,6 +151,10 @@ block content
 
       now.mappingDeleted = function (alias) {
         $('#mapping_' + alias).remove();
+      };
+
+      now.snapshotCreated = function (alias) {
+        $('#mapping_' + alias + ' .thumbnail').attr('src', '/snapshots/' + alias + '.png');
       };
 
       toggleOptions();
