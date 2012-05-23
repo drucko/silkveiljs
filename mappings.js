@@ -10,7 +10,7 @@ var store = {
   },
 
   findOne: function (alias, callback) {
-    db.mappings.findOne({ alias: alias }, callback)
+    db.mappings.findOne({ alias: alias }, callback);
   },
 
   create: function (mapping) {
