@@ -116,7 +116,7 @@ block content
           $.extend(mapping, {
             fileName: $('#fileName').val(),
             contentType: $('#contentType').val(),
-            forceDownload: $('#forceDownload').val()
+            forceDownload: $('#forceDownload').val() === 'true'
           });
         }
 
@@ -129,13 +129,6 @@ block content
         });
 
         now.createMapping(mapping);
-
-        $.each(
-          ['alias', 'url', 'type', 'fileName', 'contentType', 'validFrom', 'validBefore'],
-          function(index, id) {
-            $('#' + id).val('')
-          }
-        );
       });
 
       now.initialize = function (mappings) {
@@ -147,6 +140,40 @@ block content
 
       now.mappingCreated = function (mapping) {
         $('#content').append(template(mapping));
+      };
+
+      now.clearInputForm = function () {
+        $.each(
+          ['alias', 'url', 'fileName', 'contentType', 'validFrom', 'validBefore'],
+          function(index, id) {
+            $('#' + id).val('')
+          }
+        );
+        $.each(
+          [
+            'alias', 'url', 'action', 'type', 'fileName', 'contentType', 'forceDownload',
+            'validFrom', 'validBefore'
+          ],
+          function(index, id) {
+            $('#' + id).removeClass('error');
+          }
+        );
+      };
+
+      now.showErrors = function (fields) {
+        $.each(
+          [
+            'alias', 'url', 'action', 'type', 'fileName', 'contentType', 'forceDownload',
+            'validFrom', 'validBefore'
+          ],
+          function(index, id) {
+            if(!fields[id]) {
+              $('#' + id).removeClass('error');
+            } else {
+              $('#' + id).addClass('error');            
+            }
+          }
+        );
       };
 
       now.mappingDeleted = function (alias) {

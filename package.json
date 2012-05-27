@@ -10,7 +10,8 @@
     "now": ">= 0.8.1",
     "mongoskin": ">= 0.3.6",
     "phantom": ">= 0.3.3",
-    "kue": ">= 0.3.4"
+    "kue": ">= 0.3.4",
+    "amanda": ">= 0.4.2"
   },
   "devDependencies": {
     "node-assertthat": ">= 0.0.8"

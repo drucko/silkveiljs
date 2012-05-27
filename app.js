@@ -3,15 +3,18 @@ var http = require('http'),
     express = require('express'),
     moment = require('moment'),
     kue = require('kue'),
-    jobs = kue.createQueue();
+    amanda = require('amanda');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
 var mappings = require('./mappings.js');
 var constraints = require('./constraints.js');
 var actions = require('./actions.js');
+var schemas = require('./schemas.js');
 
 var app = express();
+var jobs = kue.createQueue();
+var validator = amanda('json');
 
 app.configure(function () {
   app.set('view engine', 'jade');
@@ -74,27 +77,43 @@ nowjs.on('connect', function () {
 });
 
 everyone.now.createMapping = function(mapping) {
-  if(mapping.constraints) {
-    mapping.constraints.validFrom && (mapping.constraints.validFrom = [
-      moment.utc(mapping.constraints.validFrom).toDate()
-    ]);
-    mapping.constraints.validBefore && (mapping.constraints.validBefore = [
-      moment.utc(mapping.constraints.validBefore).toDate()
-    ]);
-  }
-  mappings.create(mapping);
+  var that = this;
 
-  if(mapping.action === 'redirect') {
-    jobs.create('createSnapshot', {
-      title: mapping.url,
-      url: mapping.url,
-      width: 1366,
-      height: 768,
-      fileName: mapping.alias
-    }).save();
-  }
+  validator.validate(mapping, schemas[mapping.action], { singleError: false }, function (err) {
+    if(err) {
+      var fields = {};
+      for(var i = 0; i < err.length; i++) {
+        var field = err[i].property.substring(Math.max(0, err[i].property.indexOf('.') + 1));
+        fields[field] = field;
+      }
+      that.now.showErrors(fields);
+      return;
+    }
 
-  everyone.now.mappingCreated(mapping);
+    that.now.clearInputForm();
+
+    if(mapping.constraints) {
+      mapping.constraints.validFrom && (mapping.constraints.validFrom = [
+        moment.utc(mapping.constraints.validFrom).toDate()
+      ]);
+      mapping.constraints.validBefore && (mapping.constraints.validBefore = [
+        moment.utc(mapping.constraints.validBefore).toDate()
+      ]);
+    }
+    mappings.create(mapping);
+
+    if(mapping.action === 'redirect') {
+      jobs.create('createSnapshot', {
+        title: mapping.url,
+        url: mapping.url,
+        width: 1366,
+        height: 768,
+        fileName: mapping.alias
+      }).save();
+    }
+
+    everyone.now.mappingCreated(mapping);
+  });
 };
 
 everyone.now.deleteMapping = function (alias) {
