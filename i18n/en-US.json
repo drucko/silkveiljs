@@ -1,0 +1,13 @@
+{
+  "action": "Action",
+  "alias": "Alias",
+  "constraints": "Constraints",
+  "contentType": "Content type",
+  "fileName": "File name",
+  "forceDownload": "Force download",
+  "new": "New",
+  "type": "Type",
+  "url": "URL",
+  "validBefore": "Valid before",
+  "validFrom": "Valid from"
+}

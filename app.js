@@ -3,7 +3,8 @@ var http = require('http'),
     express = require('express'),
     moment = require('moment'),
     kue = require('kue'),
-    amanda = require('amanda');
+    amanda = require('amanda'),
+    lingua = require('lingua');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -19,6 +20,11 @@ var validator = amanda('json');
 app.configure(function () {
   app.set('view engine', 'jade');
   app.set('views', __dirname + '/views');
+
+  app.use(lingua(app, {
+    defaultLocale: 'de-DE',
+    path: __dirname + '/i18n'
+  }));
 
   app.use(redirect);
   app.use(express.static(__dirname + '/public'));

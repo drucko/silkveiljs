@@ -4,48 +4,48 @@ block content
   .newMapping.grid_4
     .grid_4.alpha.omega
       h3
-        | New 
+        | #{lingua.new} 
         a(href='#', id='createMapping') +
     .key.grid_1.alpha.omega
-      label(for='alias') Alias:
+      label(for='alias') #{lingua.alias}:
     .grid_3.alpha.omega
       input(type='text', id='alias')
     .key.grid_1.alpha.omega
-      label(for='url') URL:
+      label(for='url') #{lingua.url}:
     .grid_3.alpha.omega
       input(type='text', id='url')
     .key.grid_1.alpha.omega
-      label(for='action') Action:
+      label(for='action') #{lingua.action}:
     .grid_3.alpha.omega
       select(id='action')
         option(value='download') download
         option(value='redirect') redirect
     .key.grid_1.alpha.omega.redirectOption
-      label(for='type') Type:
+      label(for='type') #{lingua.type}:
     .grid_3.alpha.omega.redirectOption
       select(id='type')
         option(value='permanent') permanent
         option(value='temporary') temporary
     .key.grid_1.alpha.omega.downloadOption
-      label(for='fileName') File name:
+      label(for='fileName') #{lingua.fileName}:
     .grid_3.alpha.omega.downloadOption
       input(type='text', id='fileName')
     .key.grid_1.alpha.omega.downloadOption
-      label(for='contentType') Content type:
+      label(for='contentType') #{lingua.contentType}:
     .grid_3.alpha.omega.downloadOption
       input(type='text', id='contentType')
     .key.grid_1.alpha.omega.downloadOption
-      label(for='forceDownload') Force download:
+      label(for='forceDownload') #{lingua.forceDownload}:
     .grid_3.alpha.omega.downloadOption
       select(id='forceDownload')
         option(value='false') false
         option(value='true') true
     .key.grid_1.alpha.omega
-      label(for='validFrom') Valid from:
+      label(for='validFrom') #{lingua.validFrom}:
     .grid_3.alpha.omega
       input(type='datetime', id='validFrom')
     .key.grid_1.alpha.omega
-      label(for='validBefore') Valid before:
+      label(for='validBefore') #{lingua.validBefore}:
     .grid_3.alpha.omega
       input(type='datetime', id='validBefore')
 
@@ -59,28 +59,28 @@ block content
           else
             | \#{alias}
           a(href="javascript:void now.deleteMapping('\#{alias}');") X
-      .key.grid_1.alpha URL:
+      .key.grid_1.alpha #{lingua.url}:
       .grid_3.omega: a(href='\#{alias}')= url
-      .key.grid_1.alpha Action:
+      .key.grid_1.alpha #{lingua.action}:
       .grid_3.omega= action
       if action === 'redirect'
-        .key.grid_1.alpha Type:
+        .key.grid_1.alpha #{lingua.type}:
         .grid_3.omega= type
       else if action === 'download'
-        .key.grid_1.alpha File name:
+        .key.grid_1.alpha #{lingua.fileName}:
         .grid_3.omega= fileName
-        .key.grid_1.alpha Content type:
+        .key.grid_1.alpha #{lingua.contentType}:
         .grid_3.omega= contentType
-        .key.grid_1.alpha Force download:
+        .key.grid_1.alpha #{lingua.forceDownload}:
         .grid_3.omega= forceDownload
       .grid_4.alpha.omega
-        h4 Constraints
+        h4 #{lingua.constraints}
       if typeof constraints !== 'undefined'
         if typeof constraints.validFrom !== 'undefined'
-          .key.grid_1.alpha Valid from:
+          .key.grid_1.alpha #{lingua.validFrom}:
           .grid_3.omega= constraints.validFrom
         if typeof constraints.validBefore !== 'undefined'
-          .key.grid_1.alpha Valid before:
+          .key.grid_1.alpha #{lingua.validBefore}:
           .grid_3.omega= constraints.validBefore
       else
         .grid_4.alpha.omega n/a

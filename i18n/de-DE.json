@@ -1,0 +1,13 @@
+{
+  "action": "Vorgang",
+  "alias": "Alias",
+  "constraints": "Auflagen",
+  "contentType": "MIME-Type",
+  "fileName": "Dateiname",
+  "forceDownload": "Download erzwingen",
+  "new": "Neu",
+  "type": "Typ",
+  "url": "URL",
+  "validBefore": "Gültig ab",
+  "validFrom": "Gültig bis"
+}
