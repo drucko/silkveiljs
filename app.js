@@ -4,7 +4,9 @@ var http = require('http'),
     moment = require('moment'),
     kue = require('kue'),
     amanda = require('amanda'),
-    lingua = require('lingua');
+    lingua = require('lingua'),
+    passport = require('passport'),
+    BasicStrategy = require('passport-http').BasicStrategy;
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -25,6 +27,7 @@ app.configure(function () {
     defaultLocale: 'de-DE',
     path: __dirname + '/i18n'
   }));
+  app.use(passport.initialize());
 
   app.use(redirect);
   app.use(express.static(__dirname + '/public'));
@@ -36,6 +39,22 @@ app.configure(function () {
   }));
 });
 
+var users = {
+  golo: 'secret'
+};
+
+passport.use(new BasicStrategy(function (userid, password, done) {
+  if(!users[userid]) {
+    return done(null, false);
+  }
+
+  if(users[userid] !== password) {
+    return done(null, false);
+  }
+
+  done(null, { username: userid });
+}));
+
 function deliverDefaultImage() {
   return function (req, res, next) {
     if(req.url.indexOf('/snapshots/') !== 0) {
@@ -45,7 +64,7 @@ function deliverDefaultImage() {
   }  
 }
 
-app.get('/', function (req, res) {
+app.get('/', passport.authenticate('basic', { session: false }), function (req, res) {
   res.render('index');
 });
 
