@@ -22,7 +22,7 @@ jobs.process('createSnapshot', function (job, done) {
               title: snapshot.title,
               fileName: snapshot.fileName
             }).save();
-          })
+          });
         }, 200);
       });
     });

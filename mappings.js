@@ -17,7 +17,7 @@ var store = {
     db.mappings.save(mapping);
   },
 
-  delete: function (alias) {
+  'delete': function (alias) {
     db.mappings.remove({ alias: alias });
   }
 };

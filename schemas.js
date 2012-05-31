@@ -19,7 +19,7 @@ var schemas = {
       },
       type: {
         type: 'string',
-        enum: [ 'permanent', 'temporary' ],
+        'enum': [ 'permanent', 'temporary' ],
         required: true
       },
       constraints: {

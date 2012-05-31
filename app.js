@@ -61,7 +61,7 @@ function deliverDefaultImage() {
       return next();
     }
     res.sendfile('empty.png');
-  }  
+  };
 }
 
 app.get('/', passport.authenticate('basic', { session: false }), function (req, res) {
