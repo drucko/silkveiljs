@@ -6,7 +6,8 @@ var http = require('http'),
     amanda = require('amanda'),
     lingua = require('lingua'),
     passport = require('passport'),
-    BasicStrategy = require('passport-http').BasicStrategy;
+    BasicStrategy = require('passport-http').BasicStrategy,
+    piler = require('piler');
 
 var redirect = require('node-force-domain').redirect('silkveiljs.no.de');
 
@@ -19,7 +20,13 @@ var app = express();
 var jobs = kue.createQueue();
 var validator = amanda('json');
 
+var clientjs = piler.createJSManager();
+var clientcss = piler.createCSSManager();
+
 app.configure(function () {
+  clientjs.bind(app);
+  clientcss.bind(app);
+
   app.set('view engine', 'jade');
   app.set('views', __dirname + '/views');
 
@@ -32,12 +39,16 @@ app.configure(function () {
   app.use(redirect);
   app.use(express.static(__dirname + '/public'));
   app.use(deliverDefaultImage());
-  app.use(require('stylus').middleware({
-    src: __dirname + '/public',
-    force: true,
-    compress: true
-  }));
 });
+
+clientjs.addUrl('/nowjs/now.js');
+clientjs.addFile(__dirname + '/public/scripts/jquery-1.7.2.min.js');
+clientjs.addFile(__dirname + '/public/scripts/jade.min.js');
+
+clientcss.addFile(__dirname + '/public/styles/reset.css');
+clientcss.addFile(__dirname + '/public/styles/text.css');
+clientcss.addFile(__dirname + '/public/styles/960.css');
+clientcss.addFile(__dirname + '/public/styles/core.styl');
 
 var users = {
   golo: 'secret'

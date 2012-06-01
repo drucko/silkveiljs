@@ -14,7 +14,8 @@
     "amanda": ">= 0.4.2",
     "lingua": ">= 0.3.0",
     "passport": ">= 0.1.8",
-    "passport-http": ">= 0.1.3"
+    "passport-http": ">= 0.1.3",
+    "piler": ">= 0.3.4"
   },
   "devDependencies": {
     "node-assertthat": ">= 0.0.8"
