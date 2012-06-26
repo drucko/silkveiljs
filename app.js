@@ -76,7 +76,10 @@ function deliverDefaultImage() {
 }
 
 app.get('/', passport.authenticate('basic', { session: false }), function (req, res) {
-  res.render('index');
+  res.render('index', {
+    js: clientjs.renderTags(),
+    css: clientcss.renderTags()
+  });
 });
 
 app.get('/:alias', function (req, res) {
